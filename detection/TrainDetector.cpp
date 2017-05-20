@@ -90,7 +90,8 @@ void TrainDetector::Live() {
     printf("Can not open Camera, Please Check it!");
     return;
   }
-
+    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
   GAB Gab;
   Gab.LoadModel(opt.outFile);
 
@@ -106,8 +107,13 @@ void TrainDetector::Live() {
     index = Gab.DetectFace(gray,rects,scores);
 
     for (int i = 0; i < index.size(); i++) {
-      if(scores[index[i]]>100)
+      if(scores[index[i]]>100){
         frame = Gab.Draw(frame, rects[index[i]]);
+        char buf[32];
+        sprintf(buf, "%.3f", scores[index[i]]);
+         
+        cv::putText(frame, buf, cv::Point(rects[index[i]].x, rects[index[i]].y), 1, 0.5, cv::Scalar(255,255,255)); 
+      }
     }
     cv::imshow("live", frame);
     int key = cv::waitKey(30);
