@@ -29,8 +29,12 @@ void TrainDetector::Detect(){
   for(int i = 0;i < index.size(); i++){
     printf("%d %d %d %d %lf\n", rects[index[i]].x, rects[index[i]].y, rects[index[i]].width, rects[index[i]].height, scores[index[i]]);
    for (int i = 0; i < index.size(); i++) {
-    if(scores[index[i]]>0)
+    if(scores[index[i]]>0){
       img = Gab.Draw(img, rects[index[i]]);
+      char buf[32];
+        sprintf(buf, "%.3f", scores[index[i]]);
+        cv::putText(img, buf, cv::Point(rects[index[i]].x, rects[index[i]].y+10), 1, 1.0, cv::Scalar(255,255,255)); 
+    }
   }
   imwrite("2.jpg",img);
  }
@@ -112,7 +116,7 @@ void TrainDetector::Live() {
         char buf[32];
         sprintf(buf, "%.3f", scores[index[i]]);
          
-        cv::putText(frame, buf, cv::Point(rects[index[i]].x, rects[index[i]].y), 1, 0.5, cv::Scalar(255,255,255)); 
+        cv::putText(frame, buf, cv::Point(rects[index[i]].x, rects[index[i]].y+10), 1, 1, cv::Scalar(255,255,255)); 
       }
     }
     cv::imshow("live", frame);
